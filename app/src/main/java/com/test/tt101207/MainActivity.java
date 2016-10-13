@@ -84,11 +84,30 @@ public class MainActivity extends AppCompatActivity {
                 sb.append(new String(ch));
             }
             Log.d("DATA", sb.toString());
+            fr.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+    public void click4(View v)
+    {
+        File f1 = getExternalFilesDir(null);
+        File writeFile = new File(f1, "mydata2.txt");
+        try {
+            // FileOutputStream fos = openFileOutput(writeFile.getAbsolutePath(), MODE_PRIVATE);
+
+            FileWriter fw = new FileWriter(writeFile.getAbsoluteFile());
+            fw.write("Hello This is data2");
+            fw.flush();
+            fw.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
