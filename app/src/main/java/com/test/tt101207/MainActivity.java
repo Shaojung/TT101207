@@ -1,6 +1,10 @@
 package com.test.tt101207;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -96,6 +103,57 @@ public class MainActivity extends AppCompatActivity {
     {
         File f1 = getExternalFilesDir(null);
         File writeFile = new File(f1, "mydata2.txt");
+        try {
+            // FileOutputStream fos = openFileOutput(writeFile.getAbsolutePath(), MODE_PRIVATE);
+
+            FileWriter fw = new FileWriter(writeFile.getAbsoluteFile());
+            fw.write("Hello This is data2");
+            fw.flush();
+            fw.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void click5(View v)
+    {
+        int permission = ActivityCompat.checkSelfPermission(this,
+                WRITE_EXTERNAL_STORAGE);
+
+        if (permission == PackageManager.PERMISSION_GRANTED)
+        {
+          writeSDFile();
+        }
+        else
+        {
+            ActivityCompat.requestPermissions(this,
+                    new String[] {WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE},
+                    123);
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 123)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                writeSDFile();
+            }
+        }
+    }
+
+
+    private void writeSDFile()
+    {
+        File f1 = Environment.getExternalStorageDirectory();
+        File mypath = new File(f1, "mydatapath");
+        mypath.mkdir();
+        File writeFile = new File(mypath, "mydata2.txt");
         try {
             // FileOutputStream fos = openFileOutput(writeFile.getAbsolutePath(), MODE_PRIVATE);
 
